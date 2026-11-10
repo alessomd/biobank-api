@@ -115,8 +115,14 @@ These rules are mandatory. A change that breaks one of them is not mergeable.
 
 ## Workflow
 
-- `main` is protected: all changes go through a pull request and are squash-merged.
-- Branches: `feat/…`, `fix/…`, `refactor/…`, `test/…`, `docs/…`, `chore/…`.
+- Two long-lived, protected branches; changes reach them only through pull requests:
+  - `develop`: integration branch, deployed to the staging environment.
+  - `main`: production; every commit on `main` is a tagged release (`vX.Y.Z`).
+- Work branches start from `develop` and are squash-merged back into `develop`:
+  `feat/…`, `fix/…`, `refactor/…`, `test/…`, `docs/…`, `chore/…`.
+- A release is a pull request from `develop` to `main`, merged with a merge commit
+  (never squashed, so both branches keep a shared history) and tagged on `main`.
+- Hotfixes branch from `main` (`fix/…`), are merged into `main` and then into `develop`.
 - Commits follow Conventional Commits (`feat: add PATCH /samples/{id}`).
 - One logical change per pull request. The README is updated in the same pull request
   when behaviour, configuration or commands change.
@@ -128,6 +134,7 @@ These rules are mandatory. A change that breaks one of them is not mergeable.
 - Do not add dependencies, change the architecture or the public API contract without
   explicit approval.
 - Never commit, push, open or merge pull requests without explicit approval.
+- Never push directly to `main` or `develop`.
 - Destructive operations (`git push --force`, history rewrites, `rm -rf`, dropping
   databases, deleting cloud resources) always require explicit confirmation.
 
